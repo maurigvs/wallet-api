@@ -1,29 +1,24 @@
 package com.maurigvs.wallet.controller;
 
+import com.maurigvs.wallet.mapper.DtoMapper;
 import com.maurigvs.wallet.model.dto.CryptoDto;
-import com.maurigvs.wallet.service.CoincapService;
+import com.maurigvs.wallet.service.CryptoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("/crypto")
 @RequiredArgsConstructor
-public class CoincapController {
+public class CryptoController {
 
-    private final CoincapService coincapService;
+    private final CryptoService cryptoService;
 
     @GetMapping
     public Flux<CryptoDto> findAll() {
-        return coincapService.findAll();
-    }
-
-    @GetMapping("/{id}")
-    public Mono<CryptoDto> findById(@PathVariable String id) {
-        return coincapService.findById(id);
+        return cryptoService.findAll()
+                .map(DtoMapper::mapCrypto);
     }
 }
