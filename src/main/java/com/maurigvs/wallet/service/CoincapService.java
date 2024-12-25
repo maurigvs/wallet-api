@@ -11,6 +11,8 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.concurrent.TimeUnit;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -33,7 +35,7 @@ public class CoincapService {
                 .bodyToMono(CoincapDto.Many.class);
     }
 
-    @Scheduled(cron = "0/30 * * * * *")
+    @Scheduled(initialDelay = 5, timeUnit = TimeUnit.SECONDS)
     public Flux<Crypto> updateAll() {
         return findAll()
                 .map(EntityMapper::mapCoincapMany)

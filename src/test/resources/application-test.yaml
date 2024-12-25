@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: wallet-api
+  datasource:
+    url: jdbc:h2:mem:walletdb
+    username: postgres
+    password: postgres
+  jpa:
+    database-platform: 'org.hibernate.dialect.PostgreSQLDialect'
+
+coincap-config:
+  base-url: https://api.coincap.io/v2
+  timeout: 5000
