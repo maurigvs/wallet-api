@@ -9,3 +9,7 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create-drop
+
+coincap-config:
+  base-url: https://api.coincap.io/v2
+  timeout: 5000
