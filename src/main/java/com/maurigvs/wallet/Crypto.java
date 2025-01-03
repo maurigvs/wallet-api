@@ -3,14 +3,18 @@ package com.maurigvs.wallet;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.Instant;
 
 @Entity
 @Table(name = "cryptos")
-@Data
+@NoArgsConstructor
+@Getter
+@Setter
 public class Crypto {
 
     @Id
