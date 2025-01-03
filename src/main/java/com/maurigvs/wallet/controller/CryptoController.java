@@ -1,6 +1,5 @@
 package com.maurigvs.wallet.controller;
 
-import com.maurigvs.wallet.mapper.DtoMapper;
 import com.maurigvs.wallet.model.dto.CryptoDto;
 import com.maurigvs.wallet.service.CryptoService;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +18,6 @@ public class CryptoController {
     @GetMapping
     public Flux<CryptoDto> findAll() {
         return cryptoService.findAll()
-                .map(DtoMapper::mapCrypto);
+                .map(CryptoDto::new);
     }
 }

@@ -1,6 +1,5 @@
 package com.maurigvs.wallet.service;
 
-import com.maurigvs.wallet.mapper.EntityMapper;
 import com.maurigvs.wallet.model.dto.CoincapDto;
 import com.maurigvs.wallet.model.entity.Crypto;
 import lombok.RequiredArgsConstructor;
@@ -38,7 +37,9 @@ public class CoincapService {
     @Scheduled(initialDelay = 5, timeUnit = TimeUnit.SECONDS)
     public Flux<Crypto> updateAll() {
         return findAll()
-                .map(EntityMapper::mapCoincapMany)
+                .map(response -> response.data().stream()
+                        .map(dto -> new Crypto(dto, response.timestamp()))
+                        .toList())
                 .flatMapMany(cryptoService::saveAll)
                 .doOnComplete(() -> log.info("All cryptos updated"));
     }

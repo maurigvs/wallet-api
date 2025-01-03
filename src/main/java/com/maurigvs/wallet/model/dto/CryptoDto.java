@@ -1,6 +1,7 @@
 package com.maurigvs.wallet.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.maurigvs.wallet.model.entity.Crypto;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -38,4 +39,20 @@ public record CryptoDto(
         @JsonProperty("last_update")
         Instant lastUpdate
 ) {
+
+        public CryptoDto(Crypto crypto){
+                this(crypto.getId(),
+                        crypto.getRank(),
+                        crypto.getExternalId(),
+                        crypto.getName(),
+                        crypto.getSupply(),
+                        crypto.getMaxSupply(),
+                        crypto.getMarketCapUsd(),
+                        crypto.getVolumeUsd24Hr(),
+                        crypto.getPriceUsd(),
+                        crypto.getChangePercent24Hr(),
+                        crypto.getVwap24Hr(),
+                        crypto.getExplorer(),
+                        crypto.getLastUpdate());
+        }
 }
