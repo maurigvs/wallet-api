@@ -1,6 +1,6 @@
 package com.maurigvs.wallet.controller;
 
-import com.maurigvs.wallet.model.dto.CryptoDto;
+import com.maurigvs.wallet.CryptoDto;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;

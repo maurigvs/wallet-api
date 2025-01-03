@@ -1,4 +1,4 @@
-package com.maurigvs.wallet.model.dto;
+package com.maurigvs.wallet;
 
 import java.math.BigDecimal;
 import java.util.List;

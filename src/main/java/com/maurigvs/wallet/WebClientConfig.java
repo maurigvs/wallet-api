@@ -1,4 +1,4 @@
-package com.maurigvs.wallet.config;
+package com.maurigvs.wallet;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

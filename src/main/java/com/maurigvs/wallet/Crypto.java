@@ -1,6 +1,5 @@
-package com.maurigvs.wallet.model.entity;
+package com.maurigvs.wallet;
 
-import com.maurigvs.wallet.model.dto.CoincapDto;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
