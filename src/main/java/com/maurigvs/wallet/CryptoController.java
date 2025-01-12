@@ -1,11 +1,14 @@
 package com.maurigvs.wallet;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import reactor.core.publisher.Flux;
 
+@Slf4j
 @RestController
 @RequestMapping("/crypto")
 @RequiredArgsConstructor
@@ -13,9 +16,9 @@ public class CryptoController {
 
     private final CryptoService cryptoService;
 
-    @GetMapping
-    public Flux<CryptoDto> findAll() {
-        return cryptoService.findAll()
-                .map(CryptoDto::new);
+    @PostMapping
+    public Page<CryptoDto> findAllByParams(CryptoQueryDto params, @RequestBody CryptoFilterDto filters) {
+        log.info("Params: {} - Filters: {}", params, filters);
+        return cryptoService.findByParams(params, filters);
     }
 }
