@@ -8,6 +8,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
@@ -17,6 +18,8 @@ public class CoincapService {
 
     private final WebClient webClient;
     private final CryptoService cryptoService;
+
+    private Random random = new Random();
 
     public Mono<CoincapDto.Single> findById(String id) {
         return webClient.get()
@@ -36,7 +39,10 @@ public class CoincapService {
     public Flux<Crypto> updateAll() {
         return findAll()
                 .map(response -> response.data().stream()
-                        .map(dto -> new Crypto(dto, response.timestamp()))
+                        .map(dto -> {
+                            var id = random.nextLong(1L, 10L);
+                            return new Crypto(dto, response.timestamp(), new Category(id));
+                        })
                         .toList())
                 .flatMapMany(cryptoService::saveAll)
                 .doOnComplete(() -> log.info("All cryptos updated"));

@@ -36,7 +36,9 @@ public record CryptoDto(
         String explorer,
 
         @JsonProperty("last_update")
-        Instant lastUpdate
+        Instant lastUpdate,
+
+        CategoryDto category
 ) {
 
         public CryptoDto(Crypto crypto){
@@ -52,6 +54,16 @@ public record CryptoDto(
                         crypto.getChangePercent24Hr(),
                         crypto.getVwap24Hr(),
                         crypto.getExplorer(),
-                        crypto.getLastUpdate());
+                        crypto.getLastUpdate(),
+                        new CategoryDto(crypto.getCategory()));
+        }
+
+        public record CategoryDto(
+                long id,
+                String category
+        ) {
+                public CategoryDto(Category category){
+                        this(category.getId(), category.getName());
+                }
         }
 }

@@ -7,8 +7,6 @@ import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.scheduler.Schedulers;
@@ -35,27 +33,32 @@ public class CryptoService {
                 .subscribeOn(Schedulers.boundedElastic());
     }
 
-    public Page<CryptoDto> findByParams(CryptoQueryDto params, CryptoFilterDto filters) {
+    public Flux<CryptoDto> findByParams(List<CryptoFilterDto> filters) {
 
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Crypto> query = cb.createQuery(Crypto.class);
         Root<Crypto> crypto = query.from(Crypto.class);
         List<Predicate> predicateList = new ArrayList<>();
 
-        // if(Objects.nonNull(params.symbol())) predicateList.add(cb.like(crypto.get("id"), params.symbol()));
-        // if(Objects.nonNull(params.rank())) predicateList.add(cb.equal(crypto.get("rank"), params.rank()));
+        filters.forEach(filter -> {
+            if(filter.isValid()){
+                var values = filter.values();
+                if (filter.field().equals("symbol")) {
+                    var predicate = crypto.get("id").in(values);
+                    predicate = filter.negate() ? predicate.not() : predicate;
+                    predicateList.add(predicate);
 
-        if(filters.isValid()){
-            var predicate = crypto.get("id").in(filters.values());
-            if(filters.negate())
-                predicate = predicate.not();
-            predicateList.add(predicate);
-        }
+                } else if (filter.field().equals("category")) {
+                    var predicate = crypto.get("category").get("id").in(values.stream().map(Long::valueOf).toList());
+                    predicate = filter.negate() ? predicate.not() : predicate;
+                    predicateList.add(predicate);
+                }
+            }
+        });
 
         query.select(crypto).where(predicateList.toArray(new Predicate[0]));
 
-        List<Crypto> cryptoList = entityManager.createQuery(query).getResultList();
-
-        return new PageImpl<>(cryptoList.stream().map(CryptoDto::new).toList());
+        return Flux.fromIterable(entityManager.createQuery(query).getResultList())
+                .map(CryptoDto::new);
     }
 }

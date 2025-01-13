@@ -1,0 +1,10 @@
+insert into categories (name) values ('Smart Contract Platform');
+insert into categories (name) values ('Layer 1 (L1)');
+insert into categories (name) values ('Proof of Work (PoW)');
+insert into categories (name) values ('Andreessen Horowitz (a16z) Portfolio');
+insert into categories (name) values ('Proof of Stake (PoS)');
+insert into categories (name) values ('Multicoin Capital Portfolio');
+insert into categories (name) values ('Alameda Research Portfolio');
+insert into categories (name) values ('Delphi Ventures Portfolio');
+insert into categories (name) values ('Galaxy Digital Portfolio');
+insert into categories (name) values ('World Liberty Financial Portfolio');
