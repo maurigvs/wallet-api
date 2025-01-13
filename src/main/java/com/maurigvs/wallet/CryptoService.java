@@ -4,6 +4,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Order;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import lombok.RequiredArgsConstructor;
@@ -33,14 +34,15 @@ public class CryptoService {
                 .subscribeOn(Schedulers.boundedElastic());
     }
 
-    public Flux<CryptoDto> findByParams(List<CryptoFilterDto> filters) {
+    public Flux<CryptoDto> findByParams(CryptoCriteriaDto criteriaDto) {
 
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Crypto> query = cb.createQuery(Crypto.class);
         Root<Crypto> crypto = query.from(Crypto.class);
         List<Predicate> predicateList = new ArrayList<>();
+        List<Order> orderList = new ArrayList<>();
 
-        filters.forEach(filter -> {
+        criteriaDto.filters().forEach(filter -> {
             if(filter.isValid()){
                 var values = filter.values();
                 if (filter.field().equals("symbol")) {
@@ -56,7 +58,19 @@ public class CryptoService {
             }
         });
 
-        query.select(crypto).where(predicateList.toArray(new Predicate[0]));
+        criteriaDto.sorts().forEach(sort -> {
+            var path = crypto.get(sort.field());
+
+            if(sort.field().equals("category"))
+                path = crypto.get("category").get("name");
+
+            var order = sort.direction().isDescending() ? cb.desc(path) : cb.asc(path);
+            orderList.add(order);
+        });
+
+        query.select(crypto)
+                .where(predicateList.toArray(new Predicate[0]))
+                .orderBy(orderList.toArray(new Order[0]));
 
         return Flux.fromIterable(entityManager.createQuery(query).getResultList())
                 .map(CryptoDto::new);
