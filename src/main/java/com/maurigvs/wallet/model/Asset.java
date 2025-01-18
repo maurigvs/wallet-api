@@ -1,5 +1,6 @@
-package com.maurigvs.wallet;
+package com.maurigvs.wallet.model;
 
+import com.maurigvs.wallet.model.dto.WalletDto;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;

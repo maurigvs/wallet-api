@@ -1,5 +1,7 @@
-package com.maurigvs.wallet;
+package com.maurigvs.wallet.service;
 
+import com.maurigvs.wallet.model.Crypto;
+import com.maurigvs.wallet.model.dto.CoincapDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;

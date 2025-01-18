@@ -1,5 +1,6 @@
-package com.maurigvs.wallet;
+package com.maurigvs.wallet.repository;
 
+import com.maurigvs.wallet.model.Wallet;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

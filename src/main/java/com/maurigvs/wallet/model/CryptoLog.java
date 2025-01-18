@@ -1,4 +1,4 @@
-package com.maurigvs.wallet;
+package com.maurigvs.wallet.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

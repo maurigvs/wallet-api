@@ -1,6 +1,7 @@
-package com.maurigvs.wallet;
+package com.maurigvs.wallet.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.maurigvs.wallet.model.Crypto;
 
 import java.math.BigDecimal;
 import java.time.Instant;

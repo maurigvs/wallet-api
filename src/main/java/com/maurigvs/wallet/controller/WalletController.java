@@ -1,5 +1,8 @@
-package com.maurigvs.wallet;
+package com.maurigvs.wallet.controller;
 
+import com.maurigvs.wallet.model.Wallet;
+import com.maurigvs.wallet.model.dto.WalletDto;
+import com.maurigvs.wallet.service.WalletService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;

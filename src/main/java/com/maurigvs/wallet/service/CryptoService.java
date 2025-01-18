@@ -1,5 +1,9 @@
-package com.maurigvs.wallet;
+package com.maurigvs.wallet.service;
 
+import com.maurigvs.wallet.model.Crypto;
+import com.maurigvs.wallet.model.CryptoLog;
+import com.maurigvs.wallet.repository.CryptoLogRepository;
+import com.maurigvs.wallet.repository.CryptoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
