@@ -2,8 +2,6 @@ package com.maurigvs.wallet;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -34,11 +32,7 @@ public class Crypto {
     private String explorer;
     private Instant lastUpdate;
 
-    @ManyToOne
-    @JoinColumn(name = "category_id", nullable = false)
-    private Category category;
-
-    public Crypto(CoincapDto dto, long timestamp, Category category) {
+    public Crypto(CoincapDto dto, long timestamp) {
         this.id = dto.symbol();
         this.externalId = dto.id();
         this.rank = dto.rank();
@@ -52,6 +46,5 @@ public class Crypto {
         this.vwap24Hr = dto.vwap24Hr();
         this.explorer = dto.explorer();
         this.lastUpdate = Instant.ofEpochMilli(timestamp);
-        this.category = category;
     }
 }
