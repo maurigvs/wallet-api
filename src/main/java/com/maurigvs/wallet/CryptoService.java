@@ -18,13 +18,18 @@ public class CryptoService {
                 .flatMap(this::update);
     }
 
+    public Mono<Crypto> findById(String symbol) {
+        return Mono.fromSupplier(() -> cryptoRepository.findById(symbol).orElseThrow())
+                .subscribeOn(Schedulers.boundedElastic());
+    }
+
     public Flux<Crypto> findAll() {
         return Flux.fromIterable(cryptoRepository.findAll())
                 .subscribeOn(Schedulers.boundedElastic());
     }
 
     public Mono<Crypto> update(Crypto crypto){
-        return Mono.fromSupplier(() -> cryptoRepository.findById(crypto.getId()).orElseThrow())
+        return findById(crypto.getId())
                 .filter(entity -> !crypto.equals(entity))
                 .map(CryptoLog::new)
                 .map(cryptoLogRepository::save)
