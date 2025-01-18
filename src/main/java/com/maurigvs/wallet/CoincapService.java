@@ -32,7 +32,7 @@ public class CoincapService {
                 .bodyToMono(CoincapDto.Many.class);
     }
 
-    @Scheduled(initialDelay = 5, timeUnit = TimeUnit.SECONDS)
+    @Scheduled(initialDelay = 5, fixedDelay = 30, timeUnit = TimeUnit.SECONDS)
     public Flux<Crypto> updateAll() {
         return findAll()
                 .map(response -> response.data().stream()

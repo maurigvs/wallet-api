@@ -3,6 +3,7 @@ package com.maurigvs.wallet;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
 @Service
@@ -10,14 +11,24 @@ import reactor.core.scheduler.Schedulers;
 public class CryptoService {
 
     private final CryptoRepository cryptoRepository;
+    private final CryptoLogRepository cryptoLogRepository;
 
     public Flux<Crypto> saveAll(Iterable<Crypto> cryptos) {
-        return Flux.fromIterable(cryptoRepository.saveAll(cryptos))
-                .subscribeOn(Schedulers.boundedElastic());
+        return Flux.fromIterable(cryptos)
+                .flatMap(this::update);
     }
 
     public Flux<Crypto> findAll() {
         return Flux.fromIterable(cryptoRepository.findAll())
+                .subscribeOn(Schedulers.boundedElastic());
+    }
+
+    public Mono<Crypto> update(Crypto crypto){
+        return Mono.fromSupplier(() -> cryptoRepository.findById(crypto.getId()).orElseThrow())
+                .filter(entity -> !crypto.equals(entity))
+                .map(CryptoLog::new)
+                .map(cryptoLogRepository::save)
+                .thenReturn(cryptoRepository.save(crypto))
                 .subscribeOn(Schedulers.boundedElastic());
     }
 }
