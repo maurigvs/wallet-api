@@ -8,8 +8,6 @@ import jakarta.persistence.criteria.Order;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.scheduler.Schedulers;
@@ -41,7 +39,6 @@ public class CryptoService {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Crypto> query = cb.createQuery(Crypto.class);
         Root<Crypto> crypto = query.from(Crypto.class);
-        Pageable pageable = PageRequest.of(criteriaDto.page(), criteriaDto.size());
         List<Predicate> predicateList = new ArrayList<>();
         List<Order> orderList = new ArrayList<>();
 
@@ -71,14 +68,11 @@ public class CryptoService {
             orderList.add(order);
         });
 
-        query.select(crypto).where(predicateList.toArray(new Predicate[0]))
+        query.select(crypto)
+                .where(predicateList.toArray(new Predicate[0]))
                 .orderBy(orderList.toArray(new Order[0]));
 
-        List<Crypto> cryptoList = entityManager.createQuery(query)
-                .setFirstResult((int) pageable.getOffset())
-                .setMaxResults(pageable.getPageSize())
-                .getResultList();
-
-        return Flux.fromIterable(cryptoList).map(CryptoDto::new);
+        return Flux.fromIterable(entityManager.createQuery(query).getResultList())
+                .map(CryptoDto::new);
     }
 }
